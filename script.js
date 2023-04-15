@@ -3,17 +3,29 @@ let column;
 let row = 0;
 let output = "0";
 
+let boolean = true;
+
 
 // let ci = 0;
 // let ri = 0;  
 let i = 0;
 function but() {
+    //Initalizing start
+    let count = 0;
+    output = "0"; 
+    row = 0; 
+    boolean = true; 
+    //Initializing end
     input = document.getElementById("input").value;
+    document.getElementById("output").innerHTML = "";
     arrayize(input);
-    // column = ""; 
-    // row = 0; 
-    // output = "0"; 
-    // i = 0; 
+    while(boolean && count < 30){
+        console.log("WHILE LOOPED");
+        action(); 
+        printData(); 
+        count++; 
+    }
+
 }
 
 
@@ -24,16 +36,12 @@ function arrayize(str) {
     // console.log("array: [" + array + "]");
     console.log("Initial State: ")
     column = array[0];
+    array.shift();//We split this up into two to make it visaully make more sense.
     printData();
-    array.shift();//We split this up into two to make it visaully make more sense. 
-
 }
 
 function next() {
-    // column.push(array[i]);
-    // column = array.shift(); //But We only wanna Do this The First Time<3
     action();
-    // console.log(output);
     printData();
 }
 
@@ -47,23 +55,25 @@ function action() {
     if (row === 0) {
         if (column === "id") {
             shift(5);
+        } else if (column === "(") {
+            shift(4);
         }
     } else if (row === 1) {
         if (column === "+") {
             shift(6);
-        } else if(column === "$"){
-            column = ""; 
-            console.log("accept".toUpperCase()); 
-            
+        } else if (column === "$") {
+            column = "";
+            console.log("accept".toUpperCase());
+            boolean = false;
         }
     } else if (row === 2) {
-        if (column === "+") {
+        if (column === "+" || column === ")" || column === "$") {
             reduce(2);
+        } else if (column === "*") {
+            shift(7);
         }
     } else if (row === 3) {
-        if (column === "+") {
-            reduce(4);
-        } else if (column === "*") {
+        if (column === "+" || column === "*" || column === ")" || column === "$") {
             reduce(4);
         }
     } else if (row === 5) {
@@ -79,38 +89,49 @@ function action() {
     } else if (row === 6) {
         if (column === "id") {
             shift(5);
+        } else if (column === "(") {
+            shift(4);
         }
     } else if (row === 7) {
-
         if (column === "id") {
             shift(5);
+        } else if (column === "(") {
+            shift(4);
         }
     } else if (row === 8) {
-
+        if(column === "+"){
+            shift(6);
+        } else if(column === ")"){
+            shift(11); 
+        }
     } else if (row === 9) {
         if (column === "*") {
             shift(7);
-        } else if(column === ")" || column === "+" || column === "$"){
-            reduce(1); 
+        } else if (column === ")" || column === "+" || column === "$") {
+            reduce(1);
         }
     } else if (row === 10) {
         if (column === "+" || column === "*" || column === ")" || column === "$") {
-            console.log("Reduce 3");
+            // console.log("Reduce 3");
             reduce(3);
+        }
+    } else if(row === 11){
+        if (column === "+" || column === "*" || column === ")" || column === "$") {
+            reduce(5);
         }
     }
 }
 
 //Lets change this all to a stack. And then we can procede. A
 function reduce(rule) {
-    if(rule === 1){
+    if (rule === 1) {
         //E + T -> E
-        i = output.lastIndexOf("E"); 
+        i = output.lastIndexOf("E");
         //Check to see if correct!; 
-        output = output.substring(0, i) + "E"; 
-        Goto(output.charAt(i - 1)); 
+        output = output.substring(0, i) + "E";
+        Goto(output.charAt(i - 1));
     }
-    
+
     if (rule === 2) {
         //T -> E. 
         i = output.lastIndexOf("T");
@@ -120,7 +141,7 @@ function reduce(rule) {
     if (rule === 3) {
         i = output.search(/T[0-9]+\*[0-9]+F[0-9]+/g); //We need this to work like backwards. 
         output = output.substring(0, i) + "T";
-        Goto(output.charAt(i - 1)); 
+        Goto(output.charAt(i - 1));
 
     }
 
@@ -128,8 +149,12 @@ function reduce(rule) {
         //F -> T
         i = output.lastIndexOf("F");
         output = output.substring(0, i) + "T";
-
         Goto(output.charAt(i - 1));
+    }
+    if (rule === 5){ //Pretty Sure this one doesn't work. 
+        //(E) -> F.
+        i = output.lastIndexOf("("); 
+        output = output.substring(0, i) + "F"; 
     }
     if (rule === 6) {
         //id -> F. 
