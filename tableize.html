@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tableize</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>Tableize</h1>
+    <a href="index.html"><button>Home</button></a>
+    <script src="tableize.js"></script>
+    <br>
+    <!-- <h3>Input</h3> -->
+    <!-- <form action="">
+        <label>Enter Rules: </label>
+        <input type="text" id="ruleInput" value="">
+        <input type="button" value="Submit" onclick="button()">
+        <input type="checkbox" id="toggle" value="Toggle">
+    </form> -->
+    <br>
+    <h3>Production Rules</h3>
+    <ol>
+        <!-- <li>S → X</li>
+        <li>X → ( X )</li>
+        <li>X → ( )</li> -->
+        <li>E → E + T</li>
+        <li>E → T</li>
+        <li>T → T * F</li>
+        <li>T → F</li>
+        <li>F → (E)</li>
+        <li>F → id</li>
+    </ol>
+    <button onclick="createTable()">Make Table</button>
+    <div id="tableDiv"></div>
+</body>
+
+</html>
