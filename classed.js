@@ -53,28 +53,51 @@ function makeHeader() {
 
 //Delete this later.
 function sundrop() {
+   
+
     // let s0 = new state(0);
     // s0.generateFirst(bigCahoon);
-    // // s0.generateClosed(); 
     // // console.log(s0.print());
+    // let states = [s0]; 
 
-    // let s1 = new state(1);
-    // s1.generateIdentity([bigCahoon, ruleArray[0]], [, 2]);
-    // // console.log(s1.print());
-    // // console.log(s1.stack);
+    // let s1 = new state(1); 
+    // let p = s0.returnRules(); //Pushing E off stack.
+    // console.log("(1) Duplicate? " + isDuplicate(p));
 
-    // let s2 = new state(2);
-    // s2.generateIdentity([ruleArray[0]], [3]);
-    // // console.log(s2.print());
-    // // let s1 = s0.generateClosed(); 
+    // s1.generateIdentity(p[0], p[1]); 
+    // console.log("" + makeString(p) + "\n\nVS\n\n" + s0.identity); 
+
+    // console.log("EQUAL: " + (makeString(p) === s0.identity));
+    // states.push(s1); 
+
+
+
+    // let s2 = new state(2); 
+    // p = s0.returnRules(); //Pushing T off stack.
+    // s2.generateIdentity(p[0], p[1]);
+    // states.push(s2); 
+
+    // let s3 = new state(3); 
+    // p = s0.returnRules(); //Pushing F off stack.
+    // s3.generateIdentity(p[0], p[1]);
+    // states.push(s3); 
+
+
+    // // let states = [s0, s1, s2, s3];
+    // for (s in states) {
+    //     console.log(states[s].print());
+    // }
+
 
     // let s3 = new state(3);
     // s3.generateIdentity([ruleArray[0], ruleArray[2]], [4, 2]);
-    // // console.log(s3.print());
+    // console.log(s3.print());
 
     // let s4 = new state(4);
     // s4.generateIdentity([ruleArray[2]], [3]);
-    // // console.log(s4.print());
+    // console.log(s4.print());
+
+
 
     // let s6 = new state(6); 
     // s6.generateIdentity([ruleArray[4]], [2]); 
@@ -97,6 +120,8 @@ function sundrop() {
     //     console.log(states[e].print()); 
     // }
 
+
+
     let states = [new state(0)];
     states[0].generateFirst(bigCahoon);
 
@@ -107,21 +132,11 @@ function sundrop() {
         while (states[i].stack.length != 0) {
             ppp++;
             let p = states[i].returnRules();
-            //First we need to check to see if its a duplicate or not.
-
-            if (isDuplicate(p)) {
-                // console.log("This one is not safe to add " + p[0]);
-                // console.log(states[i].stack.shift() + " is discarded from " + i);
-                // states[i].stack.shift(); //Doing this for safety and stuff. Honestly, don't even know if its needed. 
-            } else {
-                // console.log("This one is safe to add " + p[0]);
+            if (!isDuplicate(p)) {
                 states.push(new state(count));
                 states[count].generateIdentity(p[0], p[1]);
                 count++;
             }
-            // states.push(new state(1));
-            // states[1].generateIdentity(p[0], p[1]);
-            // count++;
         }
     }
     for (let i = 0; i < states.length; i++) {
@@ -130,29 +145,79 @@ function sundrop() {
     }
     console.log(states);
 
-
+    //I don't know why this function is inside another function. 
+    /*
     function isDuplicate(p) {
         for (e in states) {
             if (JSON.stringify(states[e].identityRules) === JSON.stringify(p[0]) && JSON.stringify(states[e].returnIdentityIndexes()) === JSON.stringify(p[1])) {
-                // console.log("THERES A MATCH AT " + e); //if theres a match then that means we wouldn't want to do anything. 
-                // states.push(new state("PENIS"));
-                console.log("THERES A DUPLICATE at " + e); 
+                console.log("THERES A DUPLICATE at " + e);
                 return true;
             }
         }
-        console.log("THIS IS A UNIQUE ITEM"); 
+        console.log("THIS IS A UNIQUE ITEM");
         return false;
     }
+    */
 
+    //p = [[rules],[indexes]]
+    function isDuplicate(p) {
+        for (e in states) {
+            //If they are identitical then we return true. We were trying to add a state that already exists.  
+            if (states[e].identity === makeString(p)) {
+                console.log("THERES A DUPLICATE at " + e);
+                return true;
+            } 
+        }
+        console.log("THERE IS A UNIQUE ITEM");
+        // console.log("State[" + e + "]: Identity\n"+states[e].identity + "\nMake Identity:\n" + makeString(p)); 
+        // console.log("Equivalent: " + (states[e].identity === makeString(p)));
+        return false;//should be false. 
+    }
+
+    function makeString(p) {
+        let str = "";
+        for (let i = 0; i < p[0].length; i++) {
+            str += "(" + i + ") " + p[0][i][0] + " → ";
+            for (let j = 1; j < p[1][i] && j < p[0][i].length; j++) {
+                str += p[0][i][j] + " ";
+            }
+            str += "• ";
+            for (let j = p[1][i]; j < p[0][i].length; j++) {
+                str += p[0][i][j] + " ";
+            }
+            str += "\n";
+        }
+        return str; 
+        // console.log("HERE IS THE MAKE: \n" + str);
+        // console.log(p); 
+    }
+
+    /*makeIdentity() {
+        let str = "";
+        for (let i = 0; i < this.identityRules.length; i++) {
+            str += "(" + i + ") " + this.identityRules[i][0] + " → ";
+            for (let j = 1; j < this.indexes[i] && j < this.identityRules[i].length; j++) {
+                str += this.identityRules[i][j] + " ";
+            }
+            str += "• ";
+            for (let j = this.indexes[i]; j < this.identityRules[i].length; j++) {
+                str += this.identityRules[i][j] + " ";
+            }
+            str += "\n";
+        }
+        this.identity = str;
+    }
+    */
 }
 
 
 class state {
     indexes = [];
     rules = [];
-    identityIndex;
     stack = [];
     name;
+    identityRules = [];
+    identity;
 
     constructor(name) {
         this.name = name;
@@ -160,9 +225,7 @@ class state {
     generateIdentity(ir, ind) {
         this.identityRules = ir;
         this.indexes = ind;
-        //I guess we could do it that way. 
-
-        //before all this stuff check to see if this identity is unique <3. 
+        this.makeIdentity(); //Do We Keep This One? 
         this.generateStack();
         this.addIdentityToRules();
         this.generateClosed();
@@ -176,20 +239,16 @@ class state {
                 if (this.stack.indexOf(this.getNextIdentity(i))) {
                     this.stack.push(this.getNextIdentity(i));
                 }
-
             }
-
-
         }
     }
 
     generateFirst(firstRule) {
         this.identityRules = [firstRule]; //pushes the first rule to the thing.
         this.indexes.push(1); //pushes the index of the first thing. 
+        this.makeIdentity();
         this.stack.push(firstRule[1]);
         this.rules.push(firstRule);
-
-        // this.stack.push("T")
         this.generateClosed();
     }
 
@@ -236,25 +295,11 @@ class state {
     }
 
     print() {
-        // console.log("")
         return "State: " + this.name + "\n" + this.printStack() + "\n" + this.printRules() + "\n" + this.printIdentity();
     }
 
     printIdentity() {
-        let str = "Identity Rules: \n";
-        for (let i = 0; i < this.identityRules.length; i++) {
-            str += "(" + i + ") " + this.identityRules[i][0] + " → ";
-
-            for (let j = 1; j < this.indexes[i] && j < this.identityRules[i].length; j++) {
-                str += this.identityRules[i][j] + " ";
-            }
-            str += "• ";
-            for (let j = this.indexes[i]; j < this.identityRules[i].length; j++) {
-                str += this.identityRules[i][j] + " ";
-            }
-            str += "\n";
-        }
-        return str;
+        return "Identity Rules: \n" + this.identity;
     }
 
     getNext(int) {
@@ -287,10 +332,22 @@ class state {
         return [p, pi];
     }
 
-    returnIdentityIndexes() {
-        return this.indexes.slice(0, this.identityRules.length);
+    //Makes the string Identity for the state. Which is used to compare the identity of this state to other states. 
+    makeIdentity() {
+        let str = "";
+        for (let i = 0; i < this.identityRules.length; i++) {
+            str += "(" + i + ") " + this.identityRules[i][0] + " → ";
+            for (let j = 1; j < this.indexes[i] && j < this.identityRules[i].length; j++) {
+                str += this.identityRules[i][j] + " ";
+            }
+            str += "• ";
+            for (let j = this.indexes[i]; j < this.identityRules[i].length; j++) {
+                str += this.identityRules[i][j] + " ";
+            }
+            str += "\n";
+        }
+        this.identity = str;
     }
-
 
 
 

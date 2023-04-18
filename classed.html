@@ -32,6 +32,16 @@
     <button onclick="createTable()">Make Table</button>
     <div id="tableDiv"></div>
     <p>Now I need to generate the table. Note that I have identified where the duplicates are and that means they should have a shift at that spot to the state. </p>
+
+    <h3>Goals: </h3>
+    <ol>
+        <li>Create Function that adds all Shifts to the matrix. addMatrix(int currentState, int nextState, String validToken);</li>
+        <s><li>We need to take the shift outside of the returnRules</li></s>
+        <li><s>Add a variable to the class that is just the identity</s></li>
+        <li>Update isDuplicate() function to get rid of the JSON.stringify(). Because I built a function that outputs the Identity rules which includes the index.</li>
+    </ol>
+    <p>Also Note that right now we are creating a stringifying every single state every time we check, so we should just save it to the state class. </p>
+    <p>Also Generally I'd like to just clean up the whole thing.</p>
 </body>
 
 </html>
