@@ -134,6 +134,3 @@ function getNext(index, state, si) {
     return (state[index][si[index]]);
 }
 
-
-
-
