@@ -10,6 +10,10 @@ const ruleArray = [
 let terminals = [];
 let nonterminals = [];
 
+let states = []; 
+
+let actionTable = []; //Should correspond to the terminalCharacters. 
+
 function generateTerminalAndNonterminals() {
     terminals = [];
     nonterminals = [];
@@ -31,11 +35,29 @@ function generateTerminalAndNonterminals() {
     });
 }
 
-function createTable() {
+function makeTableButton(){
     generateTerminalAndNonterminals();
-    document.getElementById("tableDiv").innerHTML = "<table>" + makeHeader() + "</table>";
     sundrop();
-    console.log(bigString);
+    createTable(); 
+
+}
+
+function createTable() {
+    document.getElementById("tableDiv").innerHTML = "<table>" + makeHeader() + "</table>";
+    createActionTable(); 
+}
+
+function createActionTable(){
+    for(let i = 0; i < states.length; i++){
+        let arr = [];
+        for(let j = 0; j < terminals.length; j++){
+            if(actionTable[i][j] = ""); 
+            arr.push(""); 
+        }
+        actionTable.push(arr); 
+    }
+    console.log(actionTable); 
+    //wait that is actually how it goes!
 }
 
 function makeHeader() {
@@ -54,78 +76,8 @@ function makeHeader() {
 
 //Delete this later.
 function sundrop() {
-   
-
-    // let s0 = new state(0);
-    // s0.generateFirst(bigCahoon);
-    // // console.log(s0.print());
-    // let states = [s0]; 
-
-    // let s1 = new state(1); 
-    // let p = s0.returnRules(); //Pushing E off stack.
-    // console.log("(1) Duplicate? " + isDuplicate(p));
-
-    // s1.generateIdentity(p[0], p[1]); 
-    // console.log("" + makeString(p) + "\n\nVS\n\n" + s0.identity); 
-
-    // console.log("EQUAL: " + (makeString(p) === s0.identity));
-    // states.push(s1); 
-
-
-
-    // let s2 = new state(2); 
-    // p = s0.returnRules(); //Pushing T off stack.
-    // s2.generateIdentity(p[0], p[1]);
-    // states.push(s2); 
-
-    // let s3 = new state(3); 
-    // p = s0.returnRules(); //Pushing F off stack.
-    // s3.generateIdentity(p[0], p[1]);
-    // states.push(s3); 
-
-
-    // // let states = [s0, s1, s2, s3];
-    // for (s in states) {
-    //     console.log(states[s].print());
-    // }
-
-
-    // let s3 = new state(3);
-    // s3.generateIdentity([ruleArray[0], ruleArray[2]], [4, 2]);
-    // console.log(s3.print());
-
-    // let s4 = new state(4);
-    // s4.generateIdentity([ruleArray[2]], [3]);
-    // console.log(s4.print());
-
-
-
-    // let s6 = new state(6); 
-    // s6.generateIdentity([ruleArray[4]], [2]); 
-    // // console.log(s6.print()); 
-
-    // let s7 = new state(7); 
-    // s7.generateIdentity([ruleArray[4], ruleArray[0]], [3, 2]); 
-    // // console.log(s7.print()); 
-
-    // let states = [s0, s1, s2, s3, s4, s6, s7]; 
-    // let p = states[1].returnRules(); 
-
-    // for(e in states){
-    //     console.log( states[e].print()); 
-    // }
-    // console.log("IS IT TRUE? " + isDuplicate(p));
-    // console.log("IS IT TRUE? " + isDuplicate(["F", "id"]))
-    // console.log("\n\nRedraw");
-    // for(e in states){
-    //     console.log(states[e].print()); 
-    // }
-
-
-
-    let states = [new state(0)];
+    states = [new state(0)];
     states[0].generateFirst(bigCahoon);
-
 
     let count = 1;
     for (let i = 0; i < states.length; i++) {
@@ -140,38 +92,20 @@ function sundrop() {
     }
     for (let i = 0; i < states.length; i++) {
         console.log(states[i].print());
-
     }
-    console.log(states);
 
-    //I don't know why this function is inside another function. 
-    /*
-    function isDuplicate(p) {
-        for (e in states) {
-            if (JSON.stringify(states[e].identityRules) === JSON.stringify(p[0]) && JSON.stringify(states[e].returnIdentityIndexes()) === JSON.stringify(p[1])) {
-                console.log("THERES A DUPLICATE at " + e);
-                return true;
-            }
-        }
-        console.log("THIS IS A UNIQUE ITEM");
-        return false;
-    }
-    */
-
-    //p = [[rules],[indexes]]
     function isDuplicate(p, i) {
         for (e in states) {
-            //If they are identitical then we return true. We were trying to add a state that already exists.  
             if (states[e].identity === makeString(p)) {
                 // console.log("THERES A DUPLICATE at " + e);
                 addToMatrix(e, i, p[2]);
                 return true;
-            } 
+            }
         }
         // console.log("THERE IS A UNIQUE ITEM");
         addToMatrix(count, i, p[2]);
 
-        return false;//should be false. 
+        return false;
     }
 
     function makeString(p) {
@@ -187,14 +121,25 @@ function sundrop() {
             }
             str += "\n";
         }
-        return str; 
+        return str;
 
     }
 }
 
-let bigString = ""; 
-function addToMatrix(shiftState, currentState, nextToken){
-    bigString += "Add ["+currentState + ", " + nextToken + "] = " + shiftState + "\n";
+function addToMatrix(shiftState, currentState, nextToken) {
+    // bigString += "Add [" + currentState + ", " + nextToken + "] = " + shiftState + "\n";
+    
+
+}
+
+//Array should either be terminals or nonTerminals
+function getIndexOfTokens(token, array){
+    for(let i = 0; i < array.length; i++){
+        if(token === array[i]){
+            return i;
+        }
+    }
+    console.log("Error: not a token!");
 }
 
 class state {
@@ -211,7 +156,7 @@ class state {
     generateIdentity(ir, ind) {
         this.identityRules = ir;
         this.indexes = ind;
-        this.makeIdentity(); //Do We Keep This One? 
+        this.makeIdentity();
         this.generateStack();
         this.addIdentityToRules();
         this.generateClosed();
@@ -243,12 +188,10 @@ class state {
         for (let h = 0; h < this.stack.length; h++) {
             for (let i = 0; i < ruleArray.length; i++) {
                 if (this.stack[h] == ruleArray[i][0]) {
-                    // console.log("This rule belongs: " + ruleArray[i]); 
                     this.rules.push(ruleArray[i]);
                     this.indexes.push(1);
                     //Check to see if we can add it to the stack. 
                     for (let e in this.stack) {
-                        // console.log(ruleArray[i]+" Stackle " + this.stack[e]);
                         if (this.stack.indexOf(ruleArray[i][1]) === -1) {
                             this.stack.push(ruleArray[i][1]);
                         }
@@ -309,8 +252,6 @@ class state {
         let pi = [];
         for (let i = 0; i < this.rules.length; i++) {
             if (r === this.getNext(i)) {
-                // console.log("The next character matches for: " + this.rules[i]);
-                //but we also need to find the next character. 
                 p.push(this.rules[i]);
                 pi.push(this.indexes[i] + 1);
             }
@@ -334,8 +275,4 @@ class state {
         }
         this.identity = str;
     }
-
-
-
-
 }
