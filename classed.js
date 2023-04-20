@@ -1,19 +1,29 @@
-const bigCahoon = ["E'", "E"];
+// const bigCahoon = ["E'", "E"];
+// const ruleArray = [
+//     ["E", "E", "+", "T"],
+//     ["E", "T"],
+//     ["T", "T", "*", "F"],
+//     ["T", "F"],
+//     ["F", "(", "E", ")"],
+//     ["F", "id"]
+// ];
+
+const bigCahoon = ["P", "E"];
 const ruleArray = [
-    ["E", "E", "+", "T"],
-    ["E", "T"],
-    ["T", "T", "*", "F"],
-    ["T", "F"],
-    ["F", "(", "E", ")"],
-    ["F", "id"]
+    ["E", "E", "+", "T"], 
+    ["E", "T"], 
+    ["T", "id", "(", "E", ")"], 
+    ["T", "id"]
 ];
+
 let terminals = [];
 let nonterminals = [];
+
 
 function generateTerminalAndNonterminals() {
     terminals = [];
     nonterminals = [];
-    let tempElements = ["E", "id"]; //This is an array that has all the elements but only once. //Also Don't leave this bc it will make it wrong. 
+    let tempElements = []; //This is an array that has all the elements but only once. //Also Don't leave this bc it will make it wrong. 
     for (let i = 0; i < ruleArray.length; i++) {
         for (let j = 0; j < ruleArray[i].length; j++) {
             if (tempElements.indexOf(ruleArray[i][j]) === -1) {
@@ -54,7 +64,7 @@ function makeHeader() {
 
 //Delete this later.
 function sundrop() {
-   
+
 
     // let s0 = new state(0);
     // s0.generateFirst(bigCahoon);
@@ -166,7 +176,7 @@ function sundrop() {
                 // console.log("THERES A DUPLICATE at " + e);
                 addToMatrix(e, i, p[2]);
                 return true;
-            } 
+            }
         }
         // console.log("THERE IS A UNIQUE ITEM");
         addToMatrix(count, i, p[2]);
@@ -187,14 +197,14 @@ function sundrop() {
             }
             str += "\n";
         }
-        return str; 
+        return str;
 
     }
 }
 
-let bigString = ""; 
-function addToMatrix(shiftState, currentState, nextToken){
-    bigString += "Add ["+currentState + ", " + nextToken + "] = " + shiftState + "\n";
+let bigString = "";
+function addToMatrix(shiftState, currentState, nextToken) {
+    bigString += "Add [" + currentState + ", " + nextToken + "] = " + shiftState + "\n";
 }
 
 class state {

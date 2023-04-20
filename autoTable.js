@@ -7,17 +7,24 @@ const ruleArray = [
     ["F", "(", "E", ")"],
     ["F", "id"]
 ];
+
+// const bigCahoon = ["S'", "S"];
+// const ruleArray = [
+//     ["S", "A", "B"],
+//     ["A", "a"],
+//     ["B", 'b']
+// ];
 let terminals = [];
 let nonterminals = [];
 
-let states = []; 
+let states = [];
 
-let actionTable = []; //Should correspond to the terminalCharacters. 
+let actionTable = []; //Should correspond to the terminalCharacters & nonTerminalCharacters. 
 
 function generateTerminalAndNonterminals() {
     terminals = [];
     nonterminals = [];
-    let tempElements = ["E", "id"]; //This is an array that has all the elements but only once. //Also Don't leave this bc it will make it wrong. 
+    let tempElements = []; //This is an array that has all the elements but only once. //Also Don't leave this bc it will make it wrong. 
     for (let i = 0; i < ruleArray.length; i++) {
         for (let j = 0; j < ruleArray[i].length; j++) {
             if (tempElements.indexOf(ruleArray[i][j]) === -1) {
@@ -35,29 +42,48 @@ function generateTerminalAndNonterminals() {
     });
 }
 
-function makeTableButton(){
+function makeTableButton() {
     generateTerminalAndNonterminals();
     sundrop();
-    createTable(); 
-
+    // actionTable[1][getIndexOfTokens("$")] = 9999;
+    createTable();
 }
 
 function createTable() {
-    document.getElementById("tableDiv").innerHTML = "<table>" + makeHeader() + "</table>";
-    createActionTable(); 
+    document.getElementById("tableDiv").innerHTML = "<table>" + makeHeader() + makeTable() + "</table>";
+    console.log(actionTable);
 }
 
-function createActionTable(){
-    for(let i = 0; i < states.length; i++){
-        let arr = [];
-        for(let j = 0; j < terminals.length; j++){
-            if(actionTable[i][j] = ""); 
-            arr.push(""); 
-        }
-        actionTable.push(arr); 
+
+
+function tokenToIndex(token) {
+    if(token === "$"){
+        return terminals.length; 
     }
-    console.log(actionTable); 
-    //wait that is actually how it goes!
+    for (let i = 0; i < terminals.length; i++) {
+        if (token === terminals[i]) {
+            return i;
+        }
+    }
+    for (let i = 0; i < nonterminals.length; i++) {
+        if (token === nonterminals[i]) {
+            return i + terminals.length + 1;
+        }
+    }
+    return "ERROR";
+
+}
+
+function addRowToActionTable(stateCount) {
+    let tempRow = [];
+    for (let i = 0; i < terminals.length; i++) {
+        tempRow.push(-1);
+    }
+    tempRow.push(-1); //This is for $
+    for (let i = 0; i < nonterminals.length; i++) {
+        tempRow.push(-2);
+    }
+    actionTable[stateCount] = tempRow;
 }
 
 function makeHeader() {
@@ -66,7 +92,7 @@ function makeHeader() {
     for (let i = 0; i < terminals.length; i++) {
         tableString += "<td>" + terminals[i] + "</td>"
     }
-    tableString += "<td>$</td><td class='blank'</td>";
+    tableString += "<td>$</td><td class='blank'></td>";
     for (let i = 0; i < nonterminals.length; i++) {
         tableString += "<td>" + nonterminals[i] + "</td>"
     }
@@ -74,10 +100,47 @@ function makeHeader() {
     return tableString;
 }
 
+//Makes the body of the HTML Table. 
+function makeTable() {
+    let tableString = "";
+    for (let i = 0; i < actionTable.length; i++) {
+        tableString += "<tr>";
+        tableString += "<th>" + i + "</th>";
+        for (let j = 0; j < terminals.length + 1; j++) {
+            if (actionTable[i][j] == -1) {
+                tableString += "<td></td>";
+            } else {
+                if (actionTable[i][j] === 9999) {
+                    tableString += "<td>accept</td>";
+                } else {
+                    if (actionTable[i][j] >= 1000 && actionTable[i][j] < 2000) {//Checks to see if a shift. 
+                        tableString += "<td> S" + (actionTable[i][j] - 1000) + "</td>";
+                    } else {
+                        tableString += "<td> R" + (actionTable[i][j] - 2000) + "</td>";
+                    }
+                }
+            }
+        }
+        tableString += "<td class='blank'></td>";
+        for (let j = terminals.length + 1; j < actionTable[i].length; j++) {
+            if (actionTable[i][j] == -2) {
+                tableString += "<td></td>";
+            } else {
+                tableString += "<td>" + (actionTable[i][j] - 1000) + "</td>";
+            }
+        }
+        tableString += "</tr>";
+    }
+    return tableString;
+}
+
+
+
 //Delete this later.
 function sundrop() {
     states = [new state(0)];
     states[0].generateFirst(bigCahoon);
+    addRowToActionTable(0);
 
     let count = 1;
     for (let i = 0; i < states.length; i++) {
@@ -86,25 +149,30 @@ function sundrop() {
             if (!isDuplicate(p, i)) {
                 states.push(new state(count));
                 states[count].generateIdentity(p[0], p[1]);
+                //This is where we add to states. 
+                addRowToActionTable(count);
+                reduceToMatrix(count, states[count].findReduceRule());
+                addToMatrix(count, i, p[2]);
                 count++;
             }
         }
     }
     for (let i = 0; i < states.length; i++) {
         console.log(states[i].print());
+        // states[i].findReduceRule(); 
+        // console.log(states[i].findReduceRule());
+
+        //Now we need to add reduction rules <3
     }
 
     function isDuplicate(p, i) {
-        for (e in states) {
+        for (let e = 0; e < states.length; e++) {
             if (states[e].identity === makeString(p)) {
-                // console.log("THERES A DUPLICATE at " + e);
+                // console.log(e);
                 addToMatrix(e, i, p[2]);
                 return true;
             }
         }
-        // console.log("THERE IS A UNIQUE ITEM");
-        addToMatrix(count, i, p[2]);
-
         return false;
     }
 
@@ -127,17 +195,32 @@ function sundrop() {
 }
 
 function addToMatrix(shiftState, currentState, nextToken) {
-    // bigString += "Add [" + currentState + ", " + nextToken + "] = " + shiftState + "\n";
-    
-
+    actionTable[currentState][tokenToIndex(nextToken)] = 1000 + shiftState;
 }
 
-//Array should either be terminals or nonTerminals
-function getIndexOfTokens(token, array){
-    for(let i = 0; i < array.length; i++){
-        if(token === array[i]){
+//Adds the reduce rules to the matrix. 
+function reduceToMatrix(currentState, reduceRule) {
+    if (reduceRule == 0) {
+       actionTable[currentState][tokenToIndex("$")] = 9999; 
+    //    console.log("WE HAVE AN ACCEPT SOMEWHERE"); 
+    }
+    else {
+        for (let i = 0; i < terminals.length + 1; i++) {
+            if (reduceRule != -1) {
+                actionTable[currentState][i] = reduceRule + 2000;
+            }
+        }
+    }
+}
+
+function getIndexOfTokens(token) {
+    for (let i = 0; i < terminals.length; i++) {
+        if (token === terminals[i]) {
             return i;
         }
+    }
+    if (token === "$") {
+        return (terminals.length);
     }
     console.log("Error: not a token!");
 }
@@ -274,5 +357,26 @@ class state {
             str += "\n";
         }
         this.identity = str;
+    }
+
+    findReduceRule() {
+        //We need to iterate through all the rules and check to see if the index is past any of the length of that rule. 
+        
+        
+        for (let i = 0; i < this.rules.length; i++) {
+            if (this.rules[i].length === this.indexes[i]) {
+                for (let e = 0; e < ruleArray.length; e++) {
+                    if (JSON.stringify(ruleArray[e]) === JSON.stringify(this.rules[i])) {
+                        return e + 1;
+                    }
+                }
+                if(JSON.stringify(bigCahoon) === JSON.stringify(this.rules[i])){
+                    console.log("WE FOUND THE ACCEPT" + this.name);
+                    return 0; 
+                }
+            }
+        }
+        return -1;
+
     }
 }
