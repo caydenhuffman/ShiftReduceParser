@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Layout</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <h1>Layout</h1>
+    <nav>
+        <a href="index.html"><button>Home</button></a>
+    </nav>
+    <script src="layout.js"></script>
+
+    <div class="centered">
+
+        <div class="w32">
+            <h2>Production Rules</h2>
+            <div>
+                <div class="bar">
+                    <button>⇦</button>
+                    <label>Add Rule: </label>
+                    <input type="text">
+
+                    <button>⇨</button>
+                </div>
+                <div class="bar">
+                    <input type="submit" value="Add Rule">
+                </div>
+                <div class="listing">
+                    <h3>Lead Rule</h3>
+                    <ol start="0">
+                        <li>E' -> E</li>
+                    </ol>
+                    <h3>Production Rules</h3>
+                    <input type="checkbox">
+                    <label>Toggle to Delete:</label>
+
+                    <ol>
+                        <li>E -> E + T</li>
+                    </ol>
+                    <div class="bar">
+                        <button>Generate Table</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <nav>
+            <button onclick="makeTableButton()">Make Table</button>
+        </nav>  -->
+
+</body>
+
+</html>

@@ -1,12 +1,27 @@
-const bigCahoon = ["E'", "E"];
-const ruleArray = [
-    ["E", "E", "+", "T"],
-    ["E", "T"],
-    ["T", "T", "*", "F"],
-    ["T", "F"],
-    ["F", "(", "E", ")"],
-    ["F", "id"]
-];
+// const bigCahoon = ["E'", "E"];
+// const ruleArray = [
+//     ["E", "E", "+", "T"],
+//     ["E", "T"],
+//     ["T", "T", "*", "F"],
+//     ["T", "F"],
+//     ["F", "(", "E", ")"],
+//     ["F", "id"]
+// ];
+
+
+// const bigCahoon = ["S", "E"]; 
+// const ruleArray = [
+//     ["E", "T"], 
+//     ["E", "T", "xor", "E"], 
+//     ["T", "F"], 
+//     ["T", "F", "and", "T"], 
+//     ["F", "not", "F"], 
+//     ["F", "(", "E", ")"], 
+//     ["F", "true"], 
+//     ["F", "false"]
+// ]
+
+
 
 // const bigCahoon = ["S'", "S"];
 // const ruleArray = [
@@ -57,8 +72,8 @@ function createTable() {
 
 
 function tokenToIndex(token) {
-    if(token === "$"){
-        return terminals.length; 
+    if (token === "$") {
+        return terminals.length;
     }
     for (let i = 0; i < terminals.length; i++) {
         if (token === terminals[i]) {
@@ -201,8 +216,8 @@ function addToMatrix(shiftState, currentState, nextToken) {
 //Adds the reduce rules to the matrix. 
 function reduceToMatrix(currentState, reduceRule) {
     if (reduceRule == 0) {
-       actionTable[currentState][tokenToIndex("$")] = 9999; 
-    //    console.log("WE HAVE AN ACCEPT SOMEWHERE"); 
+        actionTable[currentState][tokenToIndex("$")] = 9999;
+        //    console.log("WE HAVE AN ACCEPT SOMEWHERE"); 
     }
     else {
         for (let i = 0; i < terminals.length + 1; i++) {
@@ -361,8 +376,8 @@ class state {
 
     findReduceRule() {
         //We need to iterate through all the rules and check to see if the index is past any of the length of that rule. 
-        
-        
+
+
         for (let i = 0; i < this.rules.length; i++) {
             if (this.rules[i].length === this.indexes[i]) {
                 for (let e = 0; e < ruleArray.length; e++) {
@@ -370,9 +385,9 @@ class state {
                         return e + 1;
                     }
                 }
-                if(JSON.stringify(bigCahoon) === JSON.stringify(this.rules[i])){
+                if (JSON.stringify(bigCahoon) === JSON.stringify(this.rules[i])) {
                     console.log("WE FOUND THE ACCEPT" + this.name);
-                    return 0; 
+                    return 0;
                 }
             }
         }

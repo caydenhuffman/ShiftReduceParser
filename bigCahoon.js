@@ -11,6 +11,7 @@ const ruleArray = [
 //     ["A", "a"],
 //     ["B", 'b']
 // ];
+let bigCahoon = [];
 
 let terminals = [];
 let nonterminals = [];
@@ -34,31 +35,16 @@ function generateTerminalAndNonterminals() {
     });
 }
 
-function findLeadRule() {
-    //Takes the nonTerminal that doesn't have any rules where its not the head and the baby. 
-    //Make copy of the list of terminals. 
-    let tempNonTerms = [];
-    for (let i = 0; i < nonterminals.length; i++) {
-        tempNonTerms.push(nonterminals[i]);
-    }
-
-    for (let i = 0; i < tempNonTerms.length; i++) {
-        for (let j = 0; j < ruleArray.length; j++) {
-            if (ruleArray[j][0] != tempNonTerms[i]) {
-                for (let k = 0; k < ruleArray[j].length; k++) {
-                    if(tempNonTerms[i] === ruleArray[j][k]){
-                        tempNonTerms.splice(i, 1); 
-                    }
-                }
-            }
-        }
-    }
-    console.log(tempNonTerms);
+function makeLeadRule() {
+    bigCahoon = [nonterminals[0] + "'", nonterminals[0]];
 }
+
 
 
 function makeTableButton() {
     generateTerminalAndNonterminals();
     // console.log(nonterminals); 
-    findLeadRule();
+    console.log(bigCahoon);
+    makeLeadRule();
+    console.log(bigCahoon);
 }
