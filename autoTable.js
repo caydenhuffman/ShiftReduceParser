@@ -1,12 +1,12 @@
-// const bigCahoon = ["E'", "E"];
-// const ruleArray = [
-//     ["E", "E", "+", "T"],
-//     ["E", "T"],
-//     ["T", "T", "*", "F"],
-//     ["T", "F"],
-//     ["F", "(", "E", ")"],
-//     ["F", "id"]
-// ];
+const bigCahoon = ["E'", "E"];
+const ruleArray = [
+    ["E", "E", "+", "T"],
+    ["E", "T"],
+    ["T", "T", "*", "F"],
+    ["T", "F"],
+    ["F", "(", "E", ")"],
+    ["F", "id"]
+];
 
 
 // const bigCahoon = ["S", "E"]; 

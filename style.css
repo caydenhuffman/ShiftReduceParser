@@ -48,6 +48,11 @@
      text-align: center;
  }
 
+ h2, h3{
+    text-align: center;
+ }
+
+
  nav {
      display: flex;
      /* margin: auto; */

@@ -12,6 +12,7 @@
 
 <body>
     <h1>Layout</h1>
+    <h1>Cayden Huffman</h1>
     <nav>
         <a href="index.html"><button>Home</button></a>
     </nav>
@@ -24,24 +25,26 @@
             <div>
                 <div class="bar">
                     <button>⇦</button>
-                    <label>Add Rule: </label>
-                    <input type="text">
-
+                    <p>Predefined Grammar Rules</p>
                     <button>⇨</button>
                 </div>
                 <div class="bar">
+                    <label>Rule: </label>
+                    <input type="text">
                     <input type="submit" value="Add Rule">
                 </div>
+                <div class="bar">
+
+                </div>
                 <div class="listing">
-                    <h3>Lead Rule</h3>
-                    <ol start="0">
-                        <li>E' -> E</li>
-                    </ol>
                     <h3>Production Rules</h3>
                     <input type="checkbox">
                     <label>Toggle to Delete:</label>
 
                     <ol>
+                        <li>E -> E + T</li>
+                        <li>E -> E + T</li>
+                        <li>E -> E + T</li>
                         <li>E -> E + T</li>
                     </ol>
                     <div class="bar">
@@ -50,10 +53,44 @@
                 </div>
             </div>
         </div>
+
+        <div class="w32">
+            <h2>Production Rules</h2>
+            <p>These shoudl be generated from the array and will need to be highlighted when the current rule is using
+                them!</p>
+            <ol>
+                <li>E -> E + T</li>
+                <li>E -> E + T</li>
+                <li>E -> E + T</li>
+                <li>E -> E + T</li>
+            </ol>
+        </div>
+
+        <div class="w32">
+            <h2>Table</h2>
+        </div>
+
+        <div class="w32">
+            <h2>Input</h2>
+            <button>Run</button>
+        </div>
+        <div class="w32">
+            <h2>Steps</h2>
+            <h3>Stack</h3>
+            <p>These are the things on the stack</p>
+            <h3>Tokens</h3>
+            <p>These are the the tokens</p>
+            <div class="bar">
+                <button>⇦</button>
+                <p>Cycle Steps</p>
+                <button>⇨</button>
+            </div>
+            <button>Stop</button>
+        </div>
     </div>
-    <!-- <nav>
-            <button onclick="makeTableButton()">Make Table</button>
-        </nav>  -->
+
+
+
 
 </body>
 

@@ -11,7 +11,7 @@ const ruleArray = [
 //     ["A", "a"],
 //     ["B", 'b']
 // ];
-let bigCahoon = [];
+let bigCahoon = ["E'", "E"];
 
 let terminals = [];
 let nonterminals = [];
